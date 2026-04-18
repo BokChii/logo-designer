@@ -51,11 +51,16 @@ const Uploader = {
         });
     },
 
-    _handleFile(file) {
-        // Validate type
+    async _handleFile(file) {
+        // Handle SVG auto-conversion
         if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
-            App.showToast('SVG 형식은 지원하지 않습니다. 마스코트를 PNG나 JPG로 변환해서 올려주세요.', 'error');
-            return;
+            try {
+                file = await App.svgToPng(file);
+                App.showToast('SVG 파일을 PNG로 자동 변환했습니다.', 'info');
+            } catch (err) {
+                App.showToast('SVG 변환 실패: ' + err.message, 'error');
+                return;
+            }
         }
 
         const valid = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif'];

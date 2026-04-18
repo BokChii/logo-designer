@@ -73,19 +73,24 @@ const Options = {
 
             if (!input) return;
 
-            input.addEventListener('change', (e) => {
-                const file = e.target.files[0];
+            input.addEventListener('change', async (e) => {
+                let file = e.target.files[0];
                 if (!file) return;
 
-                // SVG validation
+                // SVG auto-conversion
                 if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
-                    if (window.App && typeof window.App.showToast === 'function') {
-                        window.App.showToast('SVG 형식은 지원하지 않습니다. 로고를 PNG나 JPG로 변환해서 올려주세요.', 'error');
-                    } else {
-                        alert('SVG 형식은 지원하지 않습니다. 로고를 PNG나 JPG로 변환해서 올려주세요.');
+                    try {
+                        file = await window.App.svgToPng(file);
+                        if (window.App && typeof window.App.showToast === 'function') {
+                            window.App.showToast('SVG 파일을 PNG로 자동 변환했습니다.', 'info');
+                        }
+                    } catch (err) {
+                        if (window.App && typeof window.App.showToast === 'function') {
+                            window.App.showToast('SVG 변환 실패: ' + err.message, 'error');
+                        }
+                        input.value = '';
+                        return;
                     }
-                    input.value = '';
-                    return;
                 }
 
                 this.refFiles[category] = file;

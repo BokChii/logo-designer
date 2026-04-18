@@ -65,6 +65,32 @@ const App = {
         }
     },
 
+    svgToPng(svgFile) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(svgFile);
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                // Ensure sufficient resolution for generated PNG
+                canvas.width = img.width || 1024;
+                canvas.height = img.height || 1024;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                canvas.toBlob(blob => {
+                    URL.revokeObjectURL(url);
+                    if (!blob) return reject(new Error('PNG 변환 실패'));
+                    const pngFile = new File([blob], svgFile.name.replace(/\.svg$/i, '.png'), { type: 'image/png' });
+                    resolve(pngFile);
+                }, 'image/png');
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error('SVG 파일을 읽을 수 없습니다.'));
+            };
+            img.src = url;
+        });
+    },
+
     showToast(message, type = 'info') {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
