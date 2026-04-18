@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logo Designer — 마스코트 다양화 서비스</title>
+  <meta name="description" content="마스코트 캐릭터를 업로드하고 다양한 포즈, 배경, 복장, 스타일로 변환하세요. AI 기반 캐릭터 변형 서비스.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <h1>Logo Designer</h1>
+      </div>
+      <nav class="nav-links">
+        <a href="/" class="nav-link active">✨ 이미지 생성</a>
+        <a href="/remove-bg.html" class="nav-link">✂️ 배경 제거</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Workspace: Left + Right panels -->
+    <div class="workspace">
+
+      <!-- LEFT PANEL: Upload -->
+      <div class="panel-left">
+        <section class="section upload-section" id="upload-section">
+          <div class="section-header">
+            <span class="step-badge">1</span>
+            <h2>마스코트 업로드</h2>
+          </div>
+          <div class="upload-zone" id="upload-zone">
+            <div class="upload-placeholder" id="upload-placeholder">
+              <div class="upload-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <p class="upload-text">이미지를 드래그하거나 클릭하여 업로드</p>
+              <p class="upload-hint">PNG, JPEG, WebP, GIF, SVG (최대 20MB)</p>
+            </div>
+            <div class="upload-preview" id="upload-preview" style="display:none;">
+              <img id="preview-image" alt="업로드된 마스코트" />
+              <button class="btn-remove" id="btn-remove" title="이미지 제거">✕</button>
+            </div>
+            <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml" hidden>
+          </div>
+        </section>
+      </div><!-- /panel-left -->
+
+      <!-- RIGHT PANEL: Options + Generate -->
+      <div class="panel-right">
+        <section class="section options-section" id="options-section">
+          <div class="section-header">
+            <span class="step-badge">2</span>
+            <h2>변환 옵션 선택</h2>
+          </div>
+          <div class="options-grid" id="options-grid">
+            <!-- Pose -->
+            <div class="option-group" data-category="pose">
+              <h3 class="option-title"><span class="option-emoji">🏃</span> 포즈</h3>
+              <div class="chips" id="chips-pose">
+                <button class="chip active" data-value="default">기본</button>
+                <button class="chip" data-value="waving hello, with one hand raised">인사</button>
+                <button class="chip" data-value="running energetically">달리기</button>
+                <button class="chip" data-value="jumping joyfully in the air">점프</button>
+                <button class="chip" data-value="sitting comfortably">앉기</button>
+                <button class="chip" data-value="flying through the sky">비행</button>
+                <button class="chip" data-value="dancing happily">춤</button>
+                <button class="chip" data-value="doing a yoga pose">요가</button>
+                <button class="chip" data-value="giving a thumbs up">엄지척</button>
+                <button class="chip" data-value="making a heart shape with hands">하트</button>
+              </div>
+            </div>
+            <!-- Expression -->
+            <div class="option-group" data-category="expression">
+              <h3 class="option-title"><span class="option-emoji">😄</span> 표정</h3>
+              <div class="chips" id="chips-expression">
+                <button class="chip active" data-value="default">기본</button>
+                <button class="chip" data-value="happy and smiling brightly">웃는</button>
+                <button class="chip" data-value="surprised with wide eyes">놀란</button>
+                <button class="chip" data-value="angry and fierce">화난</button>
+                <button class="chip" data-value="playfully winking">윙크</button>
+                <button class="chip" data-value="sad and tearful">슬픈</button>
+                <button class="chip" data-value="excited and cheerful">신남</button>
+                <button class="chip" data-value="sleepy and drowsy">졸린</button>
+                <button class="chip" data-value="cool and confident">쿨한</button>
+              </div>
+            </div>
+            <!-- Background -->
+            <div class="option-group" data-category="background">
+              <h3 class="option-title"><span class="option-emoji">🌄</span> 배경</h3>
+              <div class="chips" id="chips-background">
+                <button class="chip active" data-value="none">없음</button>
+                <button class="chip" data-value="a clean white background">화이트</button>
+                <button class="chip" data-value="a modern office environment">오피스</button>
+                <button class="chip" data-value="beautiful natural scenery with trees and mountains">자연</button>
+                <button class="chip" data-value="a vibrant city skyline at night">도시</button>
+                <button class="chip" data-value="outer space with stars and galaxies">우주</button>
+                <button class="chip" data-value="a tropical beach with ocean waves">바다</button>
+                <button class="chip" data-value="a cozy coffee shop interior">카페</button>
+              </div>
+              <input type="text" class="custom-input" id="custom-background" placeholder="또는 원하는 배경을 직접 입력...">
+              <!-- Reference image upload -->
+              <div class="ref-zone" id="ref-zone-background">
+                <span class="ref-label">📎 배경 레퍼런스 이미지</span>
+                <img class="ref-preview" id="ref-preview-background" alt="배경 레퍼런스" style="display:none;">
+                <button class="ref-clear" id="ref-clear-background" style="display:none;">✕</button>
+                <input type="file" id="ref-input-background" accept="image/*" hidden>
+              </div>
+            </div>
+            <!-- Outfit -->
+            <div class="option-group" data-category="outfit">
+              <h3 class="option-title"><span class="option-emoji">👔</span> 복장</h3>
+              <div class="chips" id="chips-outfit">
+                <button class="chip active" data-value="default">기본</button>
+                <button class="chip" data-value="a formal business suit">정장</button>
+                <button class="chip" data-value="casual streetwear">캐주얼</button>
+                <button class="chip" data-value="a professional uniform">유니폼</button>
+                <button class="chip" data-value="sporty athletic wear">운동복</button>
+                <button class="chip" data-value="comfortable pajamas">파자마</button>
+                <button class="chip" data-value="a superhero costume">히어로</button>
+                <button class="chip" data-value="traditional Korean hanbok">한복</button>
+              </div>
+              <input type="text" class="custom-input" id="custom-outfit" placeholder="또는 원하는 복장을 직접 입력...">
+              <!-- Reference image upload -->
+              <div class="ref-zone" id="ref-zone-outfit">
+                <span class="ref-label">📎 복장 레퍼런스 이미지</span>
+                <img class="ref-preview" id="ref-preview-outfit" alt="복장 레퍼런스" style="display:none;">
+                <button class="ref-clear" id="ref-clear-outfit" style="display:none;">✕</button>
+                <input type="file" id="ref-input-outfit" accept="image/*" hidden>
+              </div>
+            </div>
+            <!-- Style -->
+            <div class="option-group" data-category="style">
+              <h3 class="option-title"><span class="option-emoji">🎨</span> 스타일</h3>
+              <div class="chips" id="chips-style">
+                <button class="chip active" data-value="original">원본 유지</button>
+                <button class="chip" data-value="3D rendered, CGI quality">3D 렌더</button>
+                <button class="chip" data-value="minimalist flat design">미니멀</button>
+                <button class="chip" data-value="watercolor painting">수채화</button>
+                <button class="chip" data-value="pixel art retro game style">픽셀아트</button>
+                <button class="chip" data-value="clean line art illustration">라인아트</button>
+                <button class="chip" data-value="glowing neon cyberpunk">네온</button>
+                <button class="chip" data-value="retro vintage 80s style">레트로</button>
+              </div>
+              <!-- Reference image upload -->
+              <div class="ref-zone" id="ref-zone-style">
+                <span class="ref-label">📎 스타일 레퍼런스 이미지</span>
+                <img class="ref-preview" id="ref-preview-style" alt="스타일 레퍼런스" style="display:none;">
+                <button class="ref-clear" id="ref-clear-style" style="display:none;">✕</button>
+                <input type="file" id="ref-input-style" accept="image/*" hidden>
+              </div>
+            </div>
+            <!-- Accessory -->
+            <div class="option-group" data-category="accessory">
+              <h3 class="option-title"><span class="option-emoji">🎒</span> 소품 / 액세서리</h3>
+              <div class="chips" id="chips-accessory">
+                <button class="chip active" data-value="none">없음</button>
+                <button class="chip" data-value="stylish glasses">안경</button>
+                <button class="chip" data-value="a trendy hat or cap">모자</button>
+                <button class="chip" data-value="a backpack">가방</button>
+                <button class="chip" data-value="a laptop computer">노트북</button>
+                <button class="chip" data-value="a cup of coffee">커피</button>
+                <button class="chip" data-value="colorful balloons">풍선</button>
+                <button class="chip" data-value="an umbrella">우산</button>
+                <button class="chip" data-value="a magic wand">마법봉</button>
+              </div>
+            </div>
+            <!-- Season -->
+            <div class="option-group" data-category="season">
+              <h3 class="option-title"><span class="option-emoji">🎄</span> 시즌 / 이벤트</h3>
+              <div class="chips" id="chips-season">
+                <button class="chip active" data-value="none">없음</button>
+                <button class="chip" data-value="Christmas with snow and decorations">크리스마스</button>
+                <button class="chip" data-value="spooky Halloween">할로윈</button>
+                <button class="chip" data-value="New Year celebration with fireworks">새해</button>
+                <button class="chip" data-value="spring cherry blossom season">벚꽃</button>
+                <button class="chip" data-value="summer vacation tropical vibe">여름</button>
+                <button class="chip" data-value="Korean Chuseok harvest festival">추석</button>
+                <button class="chip" data-value="Valentine's Day with hearts">밸런타인</button>
+              </div>
+            </div>
+            <!-- Aspect Ratio -->
+            <div class="option-group" data-category="aspectRatio">
+              <h3 class="option-title"><span class="option-emoji">📐</span> 비율</h3>
+              <div class="chips" id="chips-aspectRatio">
+                <button class="chip active" data-value="1:1">정사각형 1:1</button>
+                <button class="chip" data-value="9:16">세로 9:16</button>
+                <button class="chip" data-value="16:9">가로 16:9</button>
+                <button class="chip" data-value="3:4">프로필 3:4</button>
+                <button class="chip" data-value="4:3">랜드스케이프 4:3</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom prompt -->
+          <div class="custom-prompt-area">
+            <h3 class="option-title"><span class="option-emoji">✏️</span> 추가 요청사항</h3>
+            <textarea id="custom-prompt" class="custom-textarea" rows="2"
+              placeholder="추가로 원하는 변경 사항을 자유롭게 작성하세요..."></textarea>
+          </div>
+        </section>
+
+        <!-- Generate Button (우측 패널 하단 고정) -->
+        <button class="btn-generate" id="btn-generate" disabled>
+          <span class="btn-text">✨ 변환하기</span>
+          <span class="btn-loading" style="display:none;">
+            <span class="spinner"></span> 생성 중...
+          </span>
+        </button>
+        <!-- Region edit button for original image -->
+        <button class="btn-region-orig" id="btn-region-edit-orig" title="원본 이미지 영역 선택 편집">
+          🎯 원본 영역 선택 편집
+        </button>
+      </div><!-- /panel-right -->
+
+    </div><!-- /workspace -->
+
+    <!-- Step 3: Results Gallery (전체 너비 하단) -->
+    <section class="section gallery-section" id="gallery-section" style="display:none;">
+      <div class="section-header">
+        <span class="step-badge">3</span>
+        <h2>생성 결과</h2>
+        <button class="btn-clear-history" id="btn-clear-history" title="히스토리 초기화">🗑️ 초기화</button>
+      </div>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox" style="display:none;">
+    <div class="lightbox-overlay" id="lightbox-overlay"></div>
+    <div class="lightbox-content">
+      <img id="lightbox-image" alt="확대 이미지" />
+      <div class="lightbox-actions">
+        <button class="btn-download" id="lightbox-download">📥 다운로드</button>
+        <button class="btn-lb-action" id="lightbox-finetune">✏️ 세부 수정</button>
+        <button class="btn-lb-action" id="lightbox-region-edit">🎯 영역 편집</button>
+        <button class="btn-close-lightbox" id="lightbox-close">✕ 닫기</button>
+      </div>
+      <p class="lightbox-description" id="lightbox-description"></p>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Canvas Editor Modal -->
+  <div class="canvas-editor-modal" id="canvas-editor-modal" style="display:none;">
+    <div class="canvas-modal-overlay" id="canvas-modal-overlay"></div>
+    <div class="canvas-modal-content">
+      <div class="canvas-modal-header">
+        <h2 id="canvas-editor-title">영역 선택 편집</h2>
+        <div class="canvas-modal-controls">
+          <button class="btn-chip-sm" id="canvas-reset-sel">선택 초기화</button>
+          <button class="btn-close-modal" id="canvas-modal-close">✕</button>
+        </div>
+      </div>
+      <p class="canvas-instructions">드래그하여 편집할 영역을 선택하세요 (선택 없이 적용 시 전체 이미지 편집)</p>
+      <div class="canvas-wrapper">
+        <canvas id="editor-canvas" style="cursor:crosshair;"></canvas>
+      </div>
+      <div class="canvas-prompt-row">
+        <input type="text" id="canvas-prompt-input" class="canvas-prompt-input"
+          placeholder="선택 영역을 어떻게 바꿀지 입력하세요... (예: '파란 하늘 배경으로', '빨간 드레스로')">
+        <button class="btn-canvas-apply" id="canvas-apply-btn">✨ 적용</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fine-Tune Modal -->
+  <div class="fine-tune-modal" id="fine-tune-modal" style="display:none;">
+    <div class="fine-tune-overlay" id="fine-tune-overlay"></div>
+    <div class="fine-tune-content">
+      <div class="fine-tune-header">
+        <h2 id="fine-tune-title">세부 수정</h2>
+        <button class="btn-close-modal" id="fine-tune-close">✕</button>
+      </div>
+      <div class="fine-tune-body">
+        <img id="fine-tune-preview" alt="수정할 이미지" />
+        <div class="fine-tune-controls">
+          <label class="fine-tune-label">어떻게 수정할까요?</label>
+          <textarea id="fine-tune-prompt" class="custom-textarea" rows="3"
+            placeholder="예: 배경을 우주로 바꿔줘 / 표정을 웃는 얼굴로 / 모자를 추가해줘"></textarea>
+          <div class="fine-tune-actions">
+            <button class="btn-generate" id="fine-tune-submit">✨ 수정 적용</button>
+            <button class="btn-lb-action" id="fine-tune-canvas-btn">🎯 영역 선택 편집으로 전환</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api-client.js"></script>
+  <script src="/js/uploader.js"></script>
+  <script src="/js/options.js"></script>
+  <script src="/js/gallery.js"></script>
+  <script src="/js/fine-tune.js"></script>
+  <script src="/js/canvas-editor.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+
+</html>
