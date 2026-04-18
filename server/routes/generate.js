@@ -7,7 +7,7 @@ const router = Router();
 
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 20 * 1024 * 1024 },
+    limits: { fileSize: 4.5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowed = ['image/png', 'image/jpeg', 'image/webp', 'image/heic', 'image/heif'];
         if (allowed.includes(file.mimetype)) {

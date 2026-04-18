@@ -69,9 +69,9 @@ const Uploader = {
             return;
         }
 
-        // Validate size (20MB)
-        if (file.size > 20 * 1024 * 1024) {
-            App.showToast('파일 크기가 20MB를 초과합니다.', 'error');
+        // Validate size (4MB for Vercel Serverless payload limits)
+        if (file.size > 4 * 1024 * 1024) {
+            App.showToast('파일 크기가 4MB를 초과합니다 (Vercel 환경 제한). 더 작은 파일을 올려주세요.', 'error');
             return;
         }
 

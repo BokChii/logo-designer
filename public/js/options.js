@@ -93,6 +93,13 @@ const Options = {
                     }
                 }
 
+                // Size limit (Vercel max payload)
+                if (file.size > 4 * 1024 * 1024) {
+                    if (window.App) window.App.showToast('파일 크기가 4MB를 초과합니다 (Vercel 제한).', 'error');
+                    input.value = '';
+                    return;
+                }
+
                 this.refFiles[category] = file;
 
                 const reader = new FileReader();
