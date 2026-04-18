@@ -28,9 +28,14 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`🎨 Logo Designer running at http://localhost:${PORT}`);
-  if (!process.env.GEMINI_API_KEY) {
-    console.warn('⚠️  GEMINI_API_KEY not set. Create a .env file with your API key.');
-  }
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🎨 Logo Designer running at http://localhost:${PORT}`);
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn('⚠️  GEMINI_API_KEY not set. Create a .env file with your API key.');
+    }
+  });
+}
+
+// Export for Vercel Serverless Function
+export default app;
