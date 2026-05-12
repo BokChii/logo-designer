@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { editImage, editRegion } from '../services/gemini.js';
+import { logUsage } from '../services/logger.js';
 
 const router = Router();
 
@@ -9,6 +10,7 @@ const router = Router();
  * Body (JSON): { imageBase64, mimeType?, prompt }
  */
 router.post('/edit', async (req, res) => {
+    const startTime = Date.now();
     try {
         if (!process.env.GEMINI_API_KEY) {
             return res.status(500).json({ error: 'GEMINI_API_KEY가 설정되지 않았습니다.' });
@@ -23,12 +25,15 @@ router.post('/edit', async (req, res) => {
         const result = await editImage(imageBuffer, mimeType, prompt.trim());
 
         if (!result.image) {
+            logUsage(req, { action: 'edit', success: false, durationMs: Date.now() - startTime, errorMsg: 'No image returned' });
             return res.status(500).json({ error: '이미지 편집에 실패했습니다.', detail: result.text });
         }
 
+        logUsage(req, { action: 'edit', success: true, durationMs: Date.now() - startTime });
         res.json({ image: result.image, text: result.text, mimeType: 'image/png' });
     } catch (err) {
         console.error('Edit error:', err);
+        logUsage(req, { action: 'edit', success: false, durationMs: Date.now() - startTime, errorMsg: err.message });
         res.status(500).json({ error: err.message || '오류가 발생했습니다.' });
     }
 });
@@ -39,6 +44,7 @@ router.post('/edit', async (req, res) => {
  * Body (JSON): { imageBase64, maskBase64, prompt, selectionDesc? }
  */
 router.post('/edit-region', async (req, res) => {
+    const startTime = Date.now();
     try {
         if (!process.env.GEMINI_API_KEY) {
             return res.status(500).json({ error: 'GEMINI_API_KEY가 설정되지 않았습니다.' });
@@ -56,12 +62,15 @@ router.post('/edit-region', async (req, res) => {
         const result = await editRegion(imageBuffer, maskBuffer, prompt.trim(), selectionDesc);
 
         if (!result.image) {
+            logUsage(req, { action: 'edit-region', success: false, durationMs: Date.now() - startTime, errorMsg: 'No image returned' });
             return res.status(500).json({ error: '영역 편집에 실패했습니다.', detail: result.text });
         }
 
+        logUsage(req, { action: 'edit-region', success: true, durationMs: Date.now() - startTime });
         res.json({ image: result.image, text: result.text, mimeType: 'image/png' });
     } catch (err) {
         console.error('Edit-region error:', err);
+        logUsage(req, { action: 'edit-region', success: false, durationMs: Date.now() - startTime, errorMsg: err.message });
         res.status(500).json({ error: err.message || '오류가 발생했습니다.' });
     }
 });

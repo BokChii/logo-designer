@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { generateVariation } from '../services/gemini.js';
 import { buildPrompt } from '../utils/prompt-builder.js';
+import { logUsage } from '../services/logger.js';
 
 const router = Router();
 
@@ -44,6 +45,7 @@ router.post('/generate', (req, res, next) => {
         next();
     });
 }, async (req, res) => {
+    const startTime = Date.now();
     try {
         const mainFile = req.files?.image?.[0];
         if (!mainFile) {
@@ -100,15 +102,23 @@ router.post('/generate', (req, res, next) => {
         );
 
         if (!result.image) {
+            logUsage(req, { action: 'generate', success: false, durationMs: Date.now() - startTime, errorMsg: 'No image returned' });
             return res.status(500).json({
                 error: '이미지 생성에 실패했습니다. 다시 시도해주세요.',
                 detail: result.text || 'No image returned from model',
             });
         }
 
+        logUsage(req, {
+            action: 'generate',
+            success: true,
+            durationMs: Date.now() - startTime,
+            meta: { pose, background, outfit, style, expression, accessory, season, aspectRatio, hasCustomPrompt: !!customPrompt, refCount: referenceImages.length },
+        });
         res.json({ image: result.image, text: result.text, mimeType: 'image/png' });
     } catch (err) {
         console.error('Generate error:', err);
+        logUsage(req, { action: 'generate', success: false, durationMs: Date.now() - startTime, errorMsg: err.message });
         res.status(500).json({ error: err.message || '알 수 없는 오류가 발생했습니다.' });
     }
 });
